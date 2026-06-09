@@ -1,36 +1,56 @@
-# Branch: master_movement
+# Your Branch: tttau28-ux_steering
 
-## Purpose
-This branch holds the Arduino Mega firmware for all 6-motor skid-steer drive
-and the 4-servo Ackermann corner steering system.
+Welcome @tttau28-ux! You own the steering servo system.
 
-## File Structure
-```
-arduino/
-  MARS_Rover_Controller.ino   ← main firmware sketch
-  config.h                    ← all pin and constant defines
-```
+## Your Role
+You implement Ackermann-style corner steering using 4 DS3218 servos.
+When the rover turns, your code rotates the front and rear corner wheels
+in opposite directions to achieve a tight turning radius.
 
-## Hardware
-- 6x DC gear motors via 3x VNH5019 dual-channel motor drivers
-- 4x DS3218 corner steering servos
-- Arduino Mega 2560 (USB serial at 115200 baud)
+## Files To Edit
+- `arduino/MARS_Rover_Controller.ino`  ← add steering functions here
+- `arduino/config.h`  ← servo pin defines already set (pins 44-47)
 
-## Collaborator Branches (branch from here)
-| Branch                    | Owner            | Task                      |
-|---------------------------|------------------|---------------------------|
-| sitholekendra61-rgb_movement | sitholekendra61 | Motor drive logic        |
-| tttau28-ux_steering       | tttau28-ux       | Steering servo control    |
+## What To Implement
+1. `setupServos()` — attach all 4 servos and call centerSteering()
+2. `steerLeft(int angle)`
+   - Front-left servo: CENTER - angle
+   - Front-right servo: CENTER - angle
+   - Rear-left servo: CENTER + angle  ← rear steers OPPOSITE to front
+   - Rear-right servo: CENTER + angle
+3. `steerRight(int angle)` — mirror of steerLeft
+4. `centerSteering()` — all 4 servos write(90)
+5. Servo limits: CENTER=90, MAX_ANGLE=35 degrees, use constrain()
+6. Add L and R to handleCommand():
+   - L = steerLeft(SERVO_MAX_ANGLE)
+   - R = steerRight(SERVO_MAX_ANGLE)
+   - C = centerSteering()
 
-## How To Merge Back
-1. Do your work on your collaborator branch
-2. Open a Pull Request targeting **master_movement**
-3. Request review before merging
+## How It Connects
+- sitholekendra61-rgb owns motor speed — you own wheel angle
+- The Servo power wire (red) connects to 5V BEC, NOT Arduino 5V pin
+- Signal wires only go to Arduino pins 44, 45, 46, 47
 
-## How To Merge master_movement → main
-When all collaborator PRs are merged and tested:
+## How To Test
+1. Attach servos to pins 44-47 and power from BEC
+2. Upload and open Serial Monitor at 115200 baud
+3. Type L — all front wheels should angle left, rear wheels angle right
+4. Type R — opposite
+5. Type C — all wheels should return to straight ahead (90 degrees)
+6. Verify physical servo travel does not exceed 35 degrees each side
+
+## Git Instructions
 ```bash
-git checkout main
-git merge master_movement --no-ff -m "merge: master_movement into main"
-git push origin main
+git add .
+git commit -m "feat: implement Ackermann steering servo control"
+git push origin tttau28-ux_steering
 ```
+Then open a Pull Request → target branch: **master_movement**
+
+## Definition of Done
+- [ ] All 4 servos centre at 90 degrees on startup
+- [ ] steerLeft rotates front wheels left and rear wheels right
+- [ ] steerRight is the mirror opposite
+- [ ] Servo angles are constrained to 35 degrees max
+- [ ] L, R, C commands work from Serial Monitor
+- [ ] No servo jitter or overshooting at startup
