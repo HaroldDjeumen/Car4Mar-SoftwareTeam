@@ -35,16 +35,6 @@
 #define TRIG_PIN 48
 #define ECHO_PIN 49
 
-// Solar tracker servos
-#define PAN_SERVO_PIN  8
-#define TILT_SERVO_PIN 9
-
-// LDR pins (analog)
-#define LDR_LEFT  A0
-#define LDR_RIGHT A1
-#define LDR_TOP   A2
-#define LDR_BOTTOM A3
-
 // Battery voltage divider pin
 #define BATTERY_PIN A8
 
@@ -57,16 +47,6 @@
 // Servo limits
 #define SERVO_CENTER    90
 #define SERVO_MAX_ANGLE 35
-#define PAN_MIN   10
-#define PAN_MAX  170
-#define TILT_MIN  20
-#define TILT_MAX 100
-#define PARK_PAN  90
-#define PARK_TILT 10
-
-// Solar tracker
-#define LDR_THRESHOLD 15
-#define SERVO_STEP     1
 
 // Battery
 #define VOLTAGE_DIVIDER_RATIO 11.0
