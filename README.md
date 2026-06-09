@@ -20,7 +20,7 @@ Your Flask app sits on the Pi and bridges the web UI to the Arduino.
                       → returns `{"status": "ok", "cmd": cmd}`
    - `GET /telemetry`  → returns JSON:
      ```json
-     {"battery_v": 0.0, "speed_pwm": 0, "gps_lat": 0.0, "gps_lon": 0.0, "obstacle_cm": 0, "tracking": false}
+     {"battery_v": 0.0, "speed_pwm": 0, "gps_lat": 0.0, "gps_lon": 0.0, "obstacle_cm": 0}
      ```
    - Run on host='0.0.0.0', port=5000
 

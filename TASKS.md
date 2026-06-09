@@ -12,7 +12,7 @@ Implement the Flask web dashboard for WiFi-based rover control.
 - [ ] app.py: import SerialBridge and connect to Arduino
 - [ ] GET / → render index.html
 - [ ] POST /command → receive {"cmd": "F"}, call bridge.send_command(), return {"status":"ok","cmd":cmd}
-- [ ] GET /telemetry → return JSON with battery_v, speed_pwm, gps_lat, gps_lon, obstacle_cm, tracking
+- [ ] GET /telemetry → return JSON with battery_v, speed_pwm, gps_lat, gps_lon, obstacle_cm
 - [ ] Run Flask on host='0.0.0.0', port=5000
 - [ ] index.html: 5 D-pad buttons (F/B/L/R/S)
 - [ ] index.html: speed slider 0-220
