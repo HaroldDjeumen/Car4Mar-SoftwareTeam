@@ -5,7 +5,6 @@
  * Receives single-char commands over USB Serial from Raspberry Pi:
  *   F=forward  B=backward  L=left  R=right  S=stop
  *   P=pivot_left  Q=pivot_right  +=speed_up  -=speed_down
- *   T=solar_on  X=solar_off
  */
 
 #include <Servo.h>
