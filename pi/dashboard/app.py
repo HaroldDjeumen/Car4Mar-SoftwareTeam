@@ -38,8 +38,7 @@ def telemetry():
         speed_pwm   = 0,
         gps_lat     = 0.0,
         gps_lon     = 0.0,
-        obstacle_cm = 0,
-        tracking    = False
+        obstacle_cm = 0
     )
 
 if __name__ == '__main__':
