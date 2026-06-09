@@ -1,0 +1,7 @@
+pyserial>=3.5
+opencv-python>=4.8.0
+gpsd-py3>=0.3.0
+flask>=3.0.0
+pynmea2>=1.19.0
+smbus2>=0.4.3
+RPi.GPIO>=0.7.1
