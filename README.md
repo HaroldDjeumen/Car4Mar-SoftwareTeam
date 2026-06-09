@@ -1,55 +1,55 @@
-# Branch: master_pi_brain
+# Your Branch: Nkosinathi_pi_brain
 
-## Purpose
-This branch holds all Raspberry Pi 4 Python code: serial bridge to Arduino,
-camera vision pipeline, GPS navigation, and the web dashboard interface.
+Welcome @Nkosinathi! You own the Python serial bridge between the Pi and Arduino.
 
-## File Structure
-```
-pi/
-  main.py               ← entry point, wires all subsystems together
-  serial_bridge.py      ← USB serial communication with Arduino
-  power_manager.py      ← battery level monitoring
-  navigation/
-    __init__.py
-    gps_reader.py       ← NEO-6M GPS via UART
-    waypoint.py         ← Waypoint dataclass
-    path_planner.py     ← autonomous waypoint navigation
-    imu_reader.py       ← MPU-6050 over I2C
-  vision/
-    __init__.py
-    camera.py           ← Pi Camera v3 capture
-    obstacle_detector.py ← obstacle detection from camera frames
-    object_classifier.py ← object recognition skeleton
-  dashboard/
-    app.py              ← Flask web server
-    templates/
-      index.html        ← control dashboard
-    static/
-      style.css
-requirements.txt
-```
+## Your Role
+You build the communication backbone. Every movement command the Pi
+brain sends to the Arduino passes through your SerialBridge class.
+Without your code, the Raspberry Pi cannot control anything.
 
-## Collaborator Branches (branch from here)
-| Branch                | Owner        | Task                        |
-|-----------------------|--------------|-----------------------------|
-| Nkosinathi_pi_brain   | Nkosinathi   | SerialBridge implementation |
-| Maile-sudo_vision     | Maile-sudo   | OpenCV vision pipeline      |
-| mosa-lgt_navigation   | mosa-lgt     | GPS + path planning         |
+## Files To Edit
+- `pi/serial_bridge.py`  ← main file, implement full class
+- `pi/main.py`  ← wire up SerialBridge in the main loop
 
-## Setup
+## What To Implement
+SerialBridge class with:
+1. `__init__(port='/dev/ttyACM0', baud=115200)`
+2. `connect()` — open serial port, wait 2 seconds for Arduino reset
+3. `disconnect()` — close port cleanly
+4. `send_command(cmd: str)` — send single char, e.g. send_command('F')
+5. `read_response() -> str` — read one line back from Arduino
+6. `is_connected() -> bool`
+7. `auto_reconnect()` — if port drops, retry every 3 seconds in background thread
+8. A command queue using queue.Queue and threading.Thread so commands
+   never block the main Pi navigation loop
+
+## How It Connects
+- Arduino listens on Serial0 (USB, /dev/ttyACM0 on Pi)
+- Nkosinathi feeds commands → Maile-sudo (vision) and mosa-lgt (navigation)
+  both call send_command() through your bridge
+- tumzamahlaks2004-ui (dashboard) also calls send_command() via Flask POST
+
+## How To Test
+1. Connect Arduino Mega to Pi via USB
+2. Upload any sketch that echoes serial back to confirm connection
+3. Run:
 ```bash
-cd pi/
-pip install -r requirements.txt
-python main.py
+python3 -c "from pi.serial_bridge import SerialBridge; b = SerialBridge(); b.connect(); b.send_command('F')"
 ```
+4. Check Arduino serial monitor shows 'F' received
 
-## How To Merge Back
-Open a Pull Request from your collaborator branch targeting **master_pi_brain**.
-
-## How To Merge master_pi_brain → main
+## Git Instructions
 ```bash
-git checkout main
-git merge master_pi_brain --no-ff -m "merge: master_pi_brain into main"
-git push origin main
+git add .
+git commit -m "feat: implement SerialBridge class with threading and auto-reconnect"
+git push origin Nkosinathi_pi_brain
 ```
+Then open a Pull Request → target branch: **master_pi_brain**
+
+## Definition of Done
+- [ ] connect() opens serial port without errors
+- [ ] send_command('F') sends F to Arduino
+- [ ] auto_reconnect() retries on disconnect
+- [ ] Command queue prevents blocking the main loop
+- [ ] is_connected() returns correct state
+- [ ] No import errors, passes basic unit test
