@@ -1,36 +1,59 @@
-# Branch: master_movement
+# Your Branch: sitholekendra61-rgb_movement
 
-## Purpose
-This branch holds the Arduino Mega firmware for all 6-motor skid-steer drive
-and the 4-servo Ackermann corner steering system.
+Welcome @sitholekendra61-rgb! You own the core Arduino movement engine.
 
-## File Structure
-```
-arduino/
-  MARS_Rover_Controller.ino   ← main firmware sketch
-  config.h                    ← all pin and constant defines
-```
+## Your Role
+You are responsible for all 6-motor drive logic on the Arduino Mega 2560.
+Your code is the lowest layer of the rover — when the Raspberry Pi says
+"go forward", your code is what actually spins the wheels.
 
-## Hardware
-- 6x DC gear motors via 3x VNH5019 dual-channel motor drivers
-- 4x DS3218 corner steering servos
-- Arduino Mega 2560 (USB serial at 115200 baud)
+## Files To Edit
+- `arduino/MARS_Rover_Controller.ino`  ← main file, fill in all functions
+- `arduino/config.h`  ← all pin defines are already here, do not change
 
-## Collaborator Branches (branch from here)
-| Branch                    | Owner            | Task                      |
-|---------------------------|------------------|---------------------------|
-| sitholekendra61-rgb_movement | sitholekendra61 | Motor drive logic        |
-| tttau28-ux_steering       | tttau28-ux       | Steering servo control    |
+## What To Implement
+1. `setMotor(side, pos, speed, direction)`
+   - side: 0=left, 1=right | pos: 0=front, 1=mid, 2=rear
+   - speed: 0-255 PWM | direction: 1=forward, -1=backward, 0=coast
+2. `driveForward(speed)` — sets all 6 motors forward at given PWM
+3. `driveBackward(speed)` — sets all 6 motors in reverse
+4. `emergencyStop()` — immediately cuts all motors to 0
+5. `applyMotors()` — pushes currentSpeed with soft-start ramp
+6. `pivotTurn(bool pivotLeft)` — left wheels reverse, right forward
+7. `handleCommand(char cmd)` — switch on F/B/S/P/Q/+/-
+   - F = forward at SPEED_DEFAULT
+   - B = backward at SPEED_DEFAULT
+   - S = emergency stop
+   - P = pivot left, Q = pivot right
+   - + = increase targetSpeed by 20 (max SPEED_MAX=220)
+   - - = decrease targetSpeed by 20 (min SPEED_CRAWL=80)
 
-## How To Merge Back
-1. Do your work on your collaborator branch
-2. Open a Pull Request targeting **master_movement**
-3. Request review before merging
+## How It Connects
+- Arduino receives single char commands from Raspberry Pi over USB Serial (Serial0)
+- tttau28-ux is building the steering on top of your movement code
+- segobits is building the ultrasonic sensor which will call emergencyStop()
 
-## How To Merge master_movement → main
-When all collaborator PRs are merged and tested:
+## How To Test
+1. Upload sketch to Arduino Mega via Arduino IDE
+2. Open Serial Monitor at 115200 baud
+3. Type F — wheels should spin forward
+4. Type S — wheels should stop
+5. Type P — left wheels reverse, right forward (pivot)
+6. Check soft-start: speed should ramp up gradually, not jump
+
+## Git Instructions
 ```bash
-git checkout main
-git merge master_movement --no-ff -m "merge: master_movement into main"
-git push origin main
+git add .
+git commit -m "feat: implement 6-motor drive logic and handleCommand"
+git push origin sitholekendra61-rgb_movement
 ```
+Then open a Pull Request → target branch: **master_movement**
+
+## Definition of Done
+- [ ] All 6 motors spin forward on F command
+- [ ] All 6 motors reverse on B command
+- [ ] emergencyStop() cuts power instantly
+- [ ] Soft-start ramp works (no sudden speed jumps)
+- [ ] Pivot turn works (left side reverses, right side forward)
+- [ ] Speed +/- commands adjust targetSpeed within bounds
+- [ ] Code compiles without errors in Arduino IDE
