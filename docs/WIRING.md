@@ -11,9 +11,6 @@
 | Servo corners (×4)| 44–47       | PWM Out  |
 | Ultrasonic TRIG   | 48          | Digital  |
 | Ultrasonic ECHO   | 49          | Digital  |
-| Pan servo (solar) | 8           | PWM Out  |
-| Tilt servo (solar)| 9           | PWM Out  |
-| LDR sensors       | A0–A3       | Analog   |
 | Battery voltage   | A8          | Analog   |
 | I2C (IMU)         | SDA=20, SCL=21 | I2C  |
 
