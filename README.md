@@ -1,7 +1,7 @@
 # Car4Mar — Autonomous Rover
 
-**Car4Mar** is a 6-wheel skid-steer autonomous rover designed for outdoor terrain navigation,
-autonomous waypoint following, and solar-powered extended operation.
+**Car4Mar** is a 6-wheel skid-steer autonomous rover designed for outdoor terrain navigation
+and autonomous waypoint following.
 
 ## Hardware
 
@@ -16,7 +16,6 @@ autonomous waypoint following, and solar-powered extended operation.
 | IMU                    | MPU-6050 (I2C)                             |
 | GPS                    | NEO-6M (UART)                              |
 | Camera                 | Raspberry Pi Camera v3 (CSI)               |
-| Solar tracking         | LDR sensors + pan/tilt servos              |
 | Battery                | 6S LiPo 22.2V (30-40kg payload rated)     |
 
 ## Serial Command Reference
@@ -32,8 +31,6 @@ autonomous waypoint following, and solar-powered extended operation.
 | Q       | Pivot turn right              |
 | +       | Increase speed (+20 PWM)      |
 | -       | Decrease speed (-20 PWM)      |
-| T       | Enable solar tracking         |
-| X       | Disable solar tracking / park |
 
 ## Branch Map
 
@@ -44,14 +41,14 @@ autonomous waypoint following, and solar-powered extended operation.
 | master_pi_brain               | team               | main             | Raspberry Pi Python code             |
 | master_sensors                | team               | main             | Arduino sensor drivers               |
 | master_comms                  | team               | main             | WiFi dashboard (Flask)               |
-| master_power                  | team               | main             | Solar tracker + battery monitor      |
+| master_power                  | team               | main             | Battery voltage monitoring           |
 | sitholekendra61-rgb_movement  | sitholekendra61    | master_movement  | 6-motor drive logic implementation   |
 | tttau28-ux_steering           | tttau28-ux         | master_movement  | Ackermann steering servo control     |
 | Nkosinathi_pi_brain           | Nkosinathi         | master_pi_brain  | SerialBridge Pi↔Arduino comm         |
 | Maile-sudo_vision             | Maile-sudo         | master_pi_brain  | OpenCV obstacle detection pipeline   |
 | mosa-lgt_navigation           | mosa-lgt           | master_pi_brain  | GPS waypoint navigation + path plan  |
 | segobits_sensors              | segobits           | master_sensors   | HC-SR04 ultrasonic sensor driver     |
-| Mbu1310_power                 | Mbu1310            | master_power     | Solar tracker + battery monitor impl |
+| Mbu1310_power                 | Mbu1310            | master_power     | Battery voltage monitor impl         |
 | tumzamahlaks2004-ui_comms     | tumzamahlaks2004-ui| master_comms     | Flask web dashboard UI               |
 
 ## Setup
@@ -108,7 +105,7 @@ Each collaborator works on their own branch:
                                         [Arduino Mega 2560]
                                         ├── MARS_Rover_Controller.ino
                                         ├── sensors/ultrasonic
-                                        └── power/solar_tracker
+                                        └── power/battery_monitor
                                                    |
                                    ┌───────────────┼───────────────┐
                               [VNH5019 #1]   [VNH5019 #2]   [VNH5019 #3]
