@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.A.R.S. Rover Control</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>M.A.R.S. Rover Control</h1>
+
+  <!-- TODO (tumzamahlaks2004-ui): implement D-pad buttons -->
+  <div class="dpad">
+    <button class="btn" onclick="sendCmd('F')">&#9650; Forward</button>
+    <div>
+      <button class="btn" onclick="sendCmd('L')">&#9668; Left</button>
+      <button class="btn btn-stop" onclick="sendCmd('S')">&#9632; Stop</button>
+      <button class="btn" onclick="sendCmd('R')">&#9658; Right</button>
+    </div>
+    <button class="btn" onclick="sendCmd('B')">&#9660; Back</button>
+  </div>
+
+  <!-- TODO (tumzamahlaks2004-ui): speed slider -->
+  <div class="speed-control">
+    <label>Speed: <input type="range" id="speed" min="0" max="220" value="150"></label>
+  </div>
+
+  <!-- TODO (tumzamahlaks2004-ui): telemetry panel -->
+  <div class="telemetry" id="telemetry">
+    <p>Battery: <span id="battery">--</span> V</p>
+    <p>GPS: <span id="gps">--</span></p>
+    <p>Obstacle: <span id="obstacle">--</span> cm</p>
+    <p>Speed PWM: <span id="speed_pwm">--</span></p>
+  </div>
+
+  <script>
+    function sendCmd(cmd) {
+      fetch('/command', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({cmd: cmd})
+      });
+    }
+
+    // TODO (tumzamahlaks2004-ui): auto-refresh telemetry every 1 second
+    function refreshTelemetry() {
+      fetch('/telemetry')
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('battery').textContent   = data.battery_v.toFixed(1);
+          document.getElementById('gps').textContent       = data.gps_lat.toFixed(5) + ', ' + data.gps_lon.toFixed(5);
+          document.getElementById('obstacle').textContent  = data.obstacle_cm;
+          document.getElementById('speed_pwm').textContent = data.speed_pwm;
+        });
+    }
+    setInterval(refreshTelemetry, 1000);
+  </script>
+</body>
+</html>
